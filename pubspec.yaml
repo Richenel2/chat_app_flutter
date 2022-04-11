@@ -64,6 +64,6 @@ flutter:
 
 
   fonts: 
-    - family: Product sans
+    - family: Product Sans
       fonts :
         - asset: assets/fonts/product sans/Product Sans Regular.ttf
