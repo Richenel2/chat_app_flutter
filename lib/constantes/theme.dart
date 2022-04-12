@@ -9,11 +9,11 @@ class MyColor {
 class MyFont {
   static const title = TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 30,
+    fontSize: 35,
     color: MyColor.primaryGray,
   );
 
-  static const normal = TextStyle(fontSize: 18, color: MyColor.primaryGray);
+  static const normal = TextStyle(fontSize: 16, color: MyColor.primaryGray);
 
   static const button = TextStyle(
     fontSize: 24,
