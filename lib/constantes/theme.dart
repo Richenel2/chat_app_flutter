@@ -16,8 +16,9 @@ class MyFont {
   static const normal = TextStyle(fontSize: 16, color: MyColor.primaryGray);
 
   static const button = TextStyle(
-    fontSize: 24,
+    fontSize: 20,
     color: Colors.white,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.bold
   );
+
 }
