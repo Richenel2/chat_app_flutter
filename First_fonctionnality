@@ -1,0 +1,121 @@
+
+import 'dart:async';
+import 'package:alan_flutter/inscription.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'formulaire.dart';
+import 'inscription.dart';
+
+double value  = 0;
+
+void main() {
+  runApp( MaterialApp(
+    debugShowCheckedModeBanner: false ,
+    title: 'chat',
+    theme: ThemeData(
+      primaryColor: Colors.black,
+      accentColor: Colors.white,
+      textTheme: const TextTheme(
+        headline1: TextStyle(
+          fontSize: 36.0, fontWeight: FontWeight.bold, color: Colors.black
+        ),
+        headline2: TextStyle(
+          fontSize: 30.0, fontWeight: FontWeight.bold, color: Colors.black
+        ),
+        headline3: TextStyle(
+            fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.black
+        ),
+          headline4: TextStyle(
+              fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black
+          ),
+          headline5: TextStyle(
+              fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.black
+          ),
+
+        bodyText1: TextStyle(backgroundColor: Colors.green, color: Colors.white,fontSize:12,fontWeight: FontWeight.bold),
+        bodyText2: TextStyle(fontFamily: 'serif', color: Colors.black,fontSize: 15,),
+        button: TextStyle(backgroundColor: Colors.green, fontSize: 12,fontWeight: FontWeight.bold)
+
+      ),
+      fontFamily: 'Georgia'
+
+
+
+    ),
+    home: MyApp(),
+
+  ));
+}
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+
+  @override
+  MyAppState createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> {
+
+ @override
+  void initState() {
+    super.initState();
+    Timer.periodic(
+        const Duration(seconds: 1),
+            (Timer timer){
+          setState(() {
+            if(value >= 1) {
+              timer.cancel();
+             // Navigator.push(context, MaterialPageRoute(builder: (context) =>const MyApps(),));
+            }
+            else {
+              value = value + 0.1;
+
+            }
+          });
+        }
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return  Scaffold(
+
+      body: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Signln', style: Theme.of(context).textTheme.headline2),
+            Text('Create a new account to continue', style: Theme.of(context).textTheme.headline5,),
+
+
+          ],
+
+        ),
+      ),
+
+
+     
+
+    );
+  }
+
+  @override
+  void sinitState(){
+    super.initState();
+    Timer.periodic(
+        Duration(seconds: 1),
+            (Timer timer){
+          setState(() {
+            if(value == 1.1) {
+              timer.cancel();
+            }
+            else {
+              value = value + 0.1;
+            }
+          });
+        }
+    );
+  }
+
+}
+
