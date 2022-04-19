@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:sms/constantes/toast.dart';
 import 'package:sms/models/message_model.dart';
 import 'package:sms/models/user_model.dart';
 import 'package:http/http.dart';
@@ -8,15 +9,17 @@ class Api {
   Api._privateConstructor();
 
   static final Api instance = Api._privateConstructor();
-  static const String url = 'https://kayrachat.herokuapp.com/';
+  static const String url = 'https://kayrachat.herokuapp.com';
 
   Future<User?> login(
-      {required String pseudo, required String password}) async {
-    var response = await post(Uri.parse("$url/login/"),
-        body: {'pseudo': pseudo, 'password': password});
+      {required String email, required String password}) async {
+    var response = await post(Uri.parse("$url/login"),
+        body: {'email': email, 'password': password});
     if (response.statusCode != 200) {
+      Toast.showAlertToast(json.decode(response.body)['message']);
       return null;
     }
+    Toast.showDefaultToast('Connection succesfull');
     return User.fromMap(json.decode(response.body));
   }
 

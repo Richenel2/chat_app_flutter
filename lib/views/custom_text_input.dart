@@ -7,14 +7,13 @@ class CustomTextInput extends StatefulWidget {
   final TextInputType? keyBoardType;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
-  final GlobalKey<FormState> formkey;
   const CustomTextInput(
       {Key? key,
       this.text,
       this.icon,
       this.keyBoardType,
       this.validator,
-      this.controller,required this.formkey})
+      this.controller})
       : super(key: key);
 
   @override
@@ -47,56 +46,55 @@ class _CustomTextInputState extends State<CustomTextInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: widget().formkey,
-      child: Container(
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [
-          focusNode.hasFocus
-              ? const BoxShadow(
-                  color: MyColor.secondaryGray,
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
-                )
-              : const BoxShadow(),
-        ]),
-        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: isPassword
-            ? TextFormField(
-                keyboardType: widget().keyBoardType,
-                obscureText: isVisible,
-                focusNode: focusNode,
-                validator: widget().validator,
-                // controller: controller,
-                decoration: InputDecoration(
-                    labelText: 'password',
-                    icon: const Icon(Icons.https),
-                    fillColor: Colors.black,
-                    border: InputBorder.none,
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isVisible = !isVisible;
-                        });
-                      },
-                      icon: isVisible
-                          ? const Icon(Icons.visibility_off)
-                          : const Icon(Icons.visibility),
-                    )),
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        focusNode.hasFocus
+            ? const BoxShadow(
+                color: MyColor.secondaryGray,
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: Offset(0, 3),
               )
-            : TextFormField(
-                keyboardType: widget().keyBoardType,
-                focusNode: focusNode,
-                validator: widget().validator,
-                decoration: InputDecoration(
-                  labelText: widget().text,
-                  icon: Icon(widget().icon),
-                  fillColor: MyColor.primaryGray,
-                  focusColor: MyColor.primaryGray,
+            : const BoxShadow(),
+      ]),
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: isPassword
+          ? TextFormField(
+              keyboardType: widget().keyBoardType,
+              obscureText: isVisible,
+              focusNode: focusNode,
+              validator: widget().validator,
+              // controller: controller,
+              decoration: InputDecoration(
+                  errorStyle: const TextStyle(height: 0, fontSize: 0),
+                  labelText: 'password',
+                  icon: const Icon(Icons.https),
+                  fillColor: Colors.black,
                   border: InputBorder.none,
-                ),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isVisible = !isVisible;
+                      });
+                    },
+                    icon: isVisible
+                        ? const Icon(Icons.visibility_off)
+                        : const Icon(Icons.visibility),
+                  )),
+            )
+          : TextFormField(
+              keyboardType: widget().keyBoardType,
+              focusNode: focusNode,
+              validator: widget().validator,
+              decoration: InputDecoration(
+                errorStyle: const TextStyle(height: 0, fontSize: 0),
+                labelText: widget().text,
+                icon: Icon(widget().icon),
+                fillColor: MyColor.primaryGray,
+                focusColor: MyColor.primaryGray,
+                border: InputBorder.none,
               ),
-      ),
+            ),
     );
   }
 }
