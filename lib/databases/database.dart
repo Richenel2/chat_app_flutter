@@ -30,7 +30,7 @@ class MyDatabase {
           pseudo varchar(255) NOT NULL,
           email varchar(255) NOT NULL,
           onLine boolean DEFAULT 0,
-          image varchar(255) NOT NULL
+          image varchar(255) NULL
         );
       ''');
   }

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:sms/constantes/theme.dart';
 
 class CustomTextInput extends StatefulWidget {
-  final String? text;
+  final String text;
   final IconData? icon;
   final TextInputType? keyBoardType;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   const CustomTextInput(
       {Key? key,
-      this.text,
+      required this.text,
       this.icon,
       this.keyBoardType,
       this.validator,
@@ -64,10 +64,10 @@ class _CustomTextInputState extends State<CustomTextInput> {
               obscureText: isVisible,
               focusNode: focusNode,
               validator: widget().validator,
-              // controller: controller,
+              controller: widget().controller,
               decoration: InputDecoration(
                   errorStyle: const TextStyle(height: 0, fontSize: 0),
-                  labelText: 'password',
+                  labelText: widget().text,
                   icon: const Icon(Icons.https),
                   fillColor: Colors.black,
                   border: InputBorder.none,
@@ -86,6 +86,7 @@ class _CustomTextInputState extends State<CustomTextInput> {
               keyboardType: widget().keyBoardType,
               focusNode: focusNode,
               validator: widget().validator,
+              controller: widget().controller,
               decoration: InputDecoration(
                 errorStyle: const TextStyle(height: 0, fontSize: 0),
                 labelText: widget().text,

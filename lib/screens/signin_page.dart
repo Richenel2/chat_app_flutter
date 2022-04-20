@@ -7,20 +7,22 @@ import 'package:sms/constantes/toast.dart';
 import 'package:sms/models/user_model.dart';
 import 'package:sms/providers/user_provider.dart';
 import 'package:sms/screens/loading.dart';
-import 'package:sms/screens/signin_page.dart';
+import 'package:sms/screens/login_page.dart';
 import 'package:sms/views/custom_text_input.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SigninPage extends StatefulWidget {
+  const SigninPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SigninPage> createState() => _SigninPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SigninPageState extends State<SigninPage> {
   GlobalKey<FormState> key = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController pseudo = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
   bool isSending = false;
   @override
   Widget build(BuildContext context) {
@@ -59,10 +61,10 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           Text(
-                            'Login',
+                            'Sign In',
                             style: MyFont.title,
                           ),
-                          Text('Please login to continue')
+                          Text('Please Sign In to continue')
                         ],
                       ),
                       const SizedBox(
@@ -91,14 +93,46 @@ class _LoginPageState extends State<LoginPage> {
                               height: 20,
                             ),
                             CustomTextInput(
+                              controller: pseudo,
+                              text: 'pseudo',
+                              icon: Icons.person,
+                              keyBoardType: TextInputType.emailAddress,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  Toast.showAlertToast('Enter a valid pseudo');
+                                  return 'Enter a valid pseudo';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            CustomTextInput(
                               controller: password,
                               text: 'password',
                               keyBoardType: TextInputType.visiblePassword,
                               validator: (val) {
                                 if (val!.isEmpty || val.length < 6) {
                                   Toast.showAlertToast(
-                                      'Entrer un mot de passe valide');
-                                  return 'Entrer un mot de passe valide';
+                                      'please enter minimum 6 caracters');
+                                  return 'please enter minimum 6 caracters';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            CustomTextInput(
+                              controller: confirmPassword,
+                              text: 'confirm password',
+                              keyBoardType: TextInputType.visiblePassword,
+                              validator: (val) {
+                                if (val!.isEmpty || val != password.text) {
+                                  Toast.showAlertToast(
+                                      'please write the same password');
+                                  return 'please write the same password';
                                 }
                                 return null;
                               },
@@ -123,7 +157,8 @@ class _LoginPageState extends State<LoginPage> {
                                       setState(() {
                                         isSending = true;
                                       });
-                                      User? user = await Api.instance.login(
+                                      User? user = await Api.instance.signin(
+                                          pseudo: pseudo.text,
                                           email: email.text,
                                           password: password.text);
                                       if (user != null) {
@@ -148,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Row(
                                     children: const [
                                       Text(
-                                        'Login',
+                                        'Sign In',
                                         style: MyFont.button,
                                       ),
                                       Icon(Icons.keyboard_arrow_right_sharp),
@@ -166,15 +201,15 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Don't have an account? "),
+                  const Text("have an account? "),
                   TextButton(
                       onPressed: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SigninPage()));
+                                builder: (context) => const LoginPage()));
                       },
-                      child: const Text('SignIn'))
+                      child: const Text('LogIn'))
                 ],
               )
             ],

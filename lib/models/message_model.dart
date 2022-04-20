@@ -10,11 +10,13 @@ class Message {
       required this.creatorId,
       required this.creationDate});
 
-  factory Message.fromMap(Map<String, dynamic> map) => Message(
-      id: map['id'],
-      message: map['message'],
-      creatorId: map['creator_id'],
-      creationDate: map['creation_date']);
+  factory Message.fromMap(Map<String, dynamic> map) {
+    return Message(
+        id: map['id'],
+        message: map['message'],
+        creatorId: map['creator_id'],
+        creationDate: DateTime.parse(map['creation_date']));
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -24,5 +26,4 @@ class Message {
       'creation_date': creationDate
     };
   }
-
 }

@@ -11,11 +11,11 @@ class Api {
   static final Api instance = Api._privateConstructor();
   static const String url = 'https://kayrachat.herokuapp.com';
 
-  Future<User?> login(
-      {required String email, required String password}) async {
+  Future<User?> login({required String email, required String password}) async {
     var response = await post(Uri.parse("$url/login"),
         body: {'email': email, 'password': password});
-    if (response.statusCode != 200) {
+    if (response.statusCode.toString().length != 3 ||
+        response.statusCode.toString()[0] != '2') {
       Toast.showAlertToast(json.decode(response.body)['message']);
       return null;
     }
@@ -33,7 +33,12 @@ class Api {
       'email': email,
       'username': pseudo
     });
-    if (response.statusCode != 200) {
+    if (response.statusCode.toString().length != 3 ||
+        response.statusCode.toString()[0] != '2') {
+      Map<String, dynamic> body = json.decode(response.body);
+      for (var e in body.values) {
+        Toast.showAlertToast(e.toString());
+      }
       return null;
     }
     return User.fromMap(json.decode(response.body));
@@ -45,11 +50,27 @@ class Api {
 
   Future<Message?> postMessage(
       {required int creatorId, required String message}) async {
-    var reponse = await post(Uri.parse('$url/post_message/'),
-        body: {'creator_id': creatorId, 'message': message});
+    var reponse = await post(Uri.parse('$url/post_message'),
+        body: {'creator_id': "$creatorId", 'message': message});
     if (reponse.statusCode != 200) {
+      Toast.showAlertToast(reponse.body);
       return null;
     }
-    return Message.fromMap(json.decode(reponse.body));
+    return null;
+  }
+
+  Future<List<Message>?> getMessage() async {
+    var response = await get(Uri.parse('$url/messages'));
+    if (response.statusCode.toString().length != 3 ||
+        response.statusCode.toString()[0] != '2') {
+      Map<String, dynamic> body = json.decode(response.body);
+      for (var e in body.values) {
+        Toast.showAlertToast(e.toString());
+      }
+      return null;
+    }
+    List message = json.decode(response.body);
+    List<Message> messages = message.map((e) => Message.fromMap(e)).toList();
+    return messages;
   }
 }
