@@ -21,7 +21,7 @@ class User {
       image: map['image']);
 
   Map<String, dynamic> toMap() {
-    return {'id': id, 'pseudo': pseudo, 'email': email, 'image': image};
+    return {'id': id.toString(), 'pseudo': pseudo, 'email': email, 'image': image};
   }
 
   Future save() async {
@@ -29,9 +29,18 @@ class User {
     id = await db.insert('User', toMap());
   }
 
-  Future update() async {
-    await Api.instance.updateUser(this);
+  Future update({required String e, required String p}) async {
+    email = e;
+    pseudo = p;
+    bool okay = await Api.instance.updateUser(this);
+    if (okay) {
+      Database db = await MyDatabase.instance.database;
+      await db.update('User', toMap(), where: "id = ?", whereArgs: [id]);
+    }
+  }
+
+  Future delete() async {
     Database db = await MyDatabase.instance.database;
-    await db.update('User', toMap(), where: "id = ?", whereArgs: [id]);
+    id = await db.delete('User', where: "id=?", whereArgs: [id]);
   }
 }

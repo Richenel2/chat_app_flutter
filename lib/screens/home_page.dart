@@ -6,6 +6,8 @@ import 'package:sms/constantes/theme.dart';
 import 'package:sms/constantes/toast.dart';
 import 'package:sms/models/message_model.dart';
 import 'package:sms/providers/user_provider.dart';
+import 'package:sms/screens/loading.dart';
+import 'package:sms/screens/settings.dart';
 import 'package:sms/views/image_profil.dart';
 import 'package:sms/views/message_view.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class HomePage extends StatelessWidget {
   final TextEditingController message = TextEditingController();
   final List<Message> data;
+
+  // final ScrollController _scrollController = ScrollController();
   HomePage({Key? key, required this.data}) : super(key: key);
   final channel = WebSocketChannel.connect(
       Uri.parse('ws://kayrachat.herokuapp.com/mobile/'));
@@ -34,9 +38,33 @@ class HomePage extends StatelessWidget {
           color: MyColor.primaryGreen,
         ),
         actions: [
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ImageProfil(user: context.read<UserProvider>().user!))
+          PopupMenuButton(
+            icon: ImageProfil(user: context.read<UserProvider>().user!),
+            onSelected: (value) async {
+              if (value == 'logout') {
+                await context.read<UserProvider>().user!.delete();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const Loading()));
+              }else if(value == 'update'){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const SettingsPage()));
+              }
+            },
+            itemBuilder: (_) => <PopupMenuEntry>[
+              const PopupMenuItem(
+                value: 'update',
+                child: Text('Update account'),
+              ),
+              const PopupMenuItem(
+                value: 'logout',
+                child: Text('Log out'),
+              ),
+              const PopupMenuItem(
+                value: 'delete',
+                child: Text('Delete account'),
+              ),
+            ],
+          )
         ],
       ),
       body: Column(
@@ -48,7 +76,7 @@ class HomePage extends StatelessWidget {
                 if (snapshot.hasError) {
                   Toast.showAlertToast(snapshot.error.toString());
                 }
-                if (data.isEmpty) {
+                if (data.isEmpty && !snapshot.hasData) {
                   return const Center(
                     child: Text('Aucun messages pour l\'instant'),
                   );
@@ -57,6 +85,7 @@ class HomePage extends StatelessWidget {
                   data.add(Message.fromMap(json.decode(snapshot.data!)));
                 }
                 return ListView.builder(
+                    reverse: true,
                     itemCount: data.length,
                     itemBuilder: ((context, index) =>
                         MessageView(message: data[index])));

@@ -44,8 +44,20 @@ class Api {
     return User.fromMap(json.decode(response.body));
   }
 
-  Future updateUser(User user) async {
-    await put(Uri.parse('$url/users/$user.id'), body: user.toMap());
+  Future<bool> updateUser(User user) async {
+    var response =
+        await put(Uri.parse('$url/users/${user.id}/'), body: user.toMap());
+    if (response.statusCode.toString().length != 3 ||
+        response.statusCode.toString()[0] != '2') {
+      print(response.body);
+      Map<String, dynamic> body = json.decode(response.body);
+      for (var e in body.values) {
+        Toast.showAlertToast(e.toString());
+      }
+      return false;
+    }
+
+    return true;
   }
 
   Future<Message?> postMessage(

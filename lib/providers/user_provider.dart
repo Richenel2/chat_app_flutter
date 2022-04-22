@@ -11,8 +11,8 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void update() async {
-    await _user!.update();
+  Future update({required String email,required String pseudo}) async {
+    await _user!.update(e:email,p:pseudo);
     notifyListeners();
   }
 }
